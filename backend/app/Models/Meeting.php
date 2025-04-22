@@ -54,7 +54,14 @@ class Meeting extends Model
                         ->where('end_time', '>', $this->start_time);
                 });
             })
-            ->where('id', '!=', $this->id) 
+            ->where('id', '!=', $this->id)
+            ->where(function ($query) {
+                $query->whereDate('date', '>', now()->toDateString())
+                    ->orWhere(function ($query) {
+                        $query->whereDate('date', now()->toDateString())
+                            ->where('start_time', '>', now()->toTimeString());
+                    });
+            })
             ->exists();
     }
 }

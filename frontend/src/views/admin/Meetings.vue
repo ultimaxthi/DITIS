@@ -362,6 +362,8 @@ function formatPayload() {
   return {
     ...newMeeting.value,
     date: new Date(newMeeting.value.date).toISOString().split('T')[0], 
+    start_time: newMeeting.value.start_time?.slice(0,5),
+    end_time: newMeeting.value.end_time?.slice(0,5),
   };
 }
 

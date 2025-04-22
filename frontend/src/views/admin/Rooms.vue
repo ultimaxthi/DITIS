@@ -300,6 +300,7 @@ onMounted(async () => {
     toast.error(`Erro ao carregar salas: ${error.response?.data?.message || "Erro desconhecido"}`);
   } finally {
     isLoading.value = false;
+    console.log(rooms);
   }
 });
 </script>

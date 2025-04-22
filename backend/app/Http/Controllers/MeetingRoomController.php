@@ -11,7 +11,7 @@ class MeetingRoomController extends Controller
 {
     protected $service;
 
-    public function __construct(MeetingRoomService $service = null)
+    public function __construct(MeetingRoomService $service)
     {
         $this->service = $service;
     }
@@ -19,11 +19,10 @@ class MeetingRoomController extends Controller
     public function index()
     {
         try {
-            // Tentar usar o serviço se estiver disponível
             if ($this->service) {
                 $rooms = $this->service->getAllRooms();
             } else {
-                // Fallback para consulta direta ao modelo se o serviço não estiver injetado
+
                 $rooms = MeetingRoom::all();
             }
             
@@ -31,10 +30,15 @@ class MeetingRoomController extends Controller
             $normalizedRooms = [];
             
             foreach ($rooms as $room) {
-                // Converter para array se for objeto
-                $roomData = is_object($room) ? (array) $room : $room;
+
+                $roomData = is_array($room) ?  $room : (is_object($room) ? $room->toArray() : []);
                 
-                // Garantir que todos os campos estão presentes com nomenclatura padronizada
+                if(!isset($roomData['id']))
+                {
+                    \Log::warning('Sala sem ID detectada:', $roomData);
+                    continue;
+                }
+
                 $normalizedRooms[] = [
                     'id' => $roomData['id'],
                     'nome' => $roomData['nome'] ?? $roomData['name'] ?? 'Sala sem nome',

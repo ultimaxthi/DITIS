@@ -2,23 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SelectOptionsController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'reset']);
 
-// Rotas públicas para acesso frontend sem autenticação
-Route::get('/meeting-rooms', [MeetingRoomController::class, 'index']);
-Route::get('/users/index', [AuthController::class, 'index']);
 
-// Rotas para opções de select
-Route::get('/selects/users', [\App\Http\Controllers\SelectOptionsController::class, 'getUsers']);
-Route::get('/selects/rooms', [\App\Http\Controllers\SelectOptionsController::class, 'getRooms']);
-Route::get('/selects/meeting-statuses', [\App\Http\Controllers\SelectOptionsController::class, 'getMeetingStatuses']);
+Route::get('/meeting-rooms', [MeetingRoomController::class, 'index']);
+//Route::get('/users/index', [AuthController::class, 'index']);
+
+
+Route::prefix('selects')->group(function () {
+    Route::get('/users', [SelectOptionsController::class, 'getUsers']);
+    Route::get('/rooms', [SelectOptionsController::class, 'getRooms']);
+    Route::get('/meeting-statuses', [SelectOptionsController::class, 'getMeetingStatuses']);
+});
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -38,8 +44,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::prefix('meetings')->group(function () {
-        Route::get('/day/{date}', [MeetingController::class, 'getMeetingsByDay']);
         Route::get('/', [MeetingController::class, 'index']);
+        Route::get('/day/{date}', [MeetingController::class, 'getMeetingsByDay']);
         Route::get('/my-meetings', [MeetingController::class, 'getMyMeetings']);
         Route::post('/', [MeetingController::class, 'store']);
         Route::get('/{id}', [MeetingController::class, 'show']);
@@ -50,10 +56,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/reservations-by-day/{id}', [MeetingController::class, 'getReservationsByDay']);
     });
 
-    Route::middleware(['role:admin'])->prefix('users')->group(function () {
-        Route::get('/index', [AuthController::class, 'index']);
-        Route::post('/add-admin', [AuthController::class, 'addAdmin']);
-        Route::put('/updateAdmin/{id}', [AuthController::class, 'updateAdmin']);
-        Route::get('/summary-data', [AuthController::class, 'getSummaryData']);
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'show']);
+        Route::put('/', [ProfileController::class,'update']);
     });
+
+    Route::middleware(['role:admin'])->prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::put('/{id}', [UserController::class, 'updateWithRole']);
+        Route::delete('/{id}', [UserController::class, 'destroy']);
+        Route::get('/summary-data', [UserController::class, 'summary']);
+        Route::get('/{id}', [UserController::class, 'show']);
+    });
+
 });

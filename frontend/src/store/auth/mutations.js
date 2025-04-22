@@ -3,6 +3,7 @@ export const mutations = {
     console.log('Token sendo armazenado:', token); // Verifique se o token está sendo armazenado corretamente
     state.token = token;
     localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   },
   
   setRole(state, role) {

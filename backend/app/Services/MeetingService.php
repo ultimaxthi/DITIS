@@ -69,10 +69,14 @@ class MeetingService
     {
         $startTime = Carbon::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['start_time'])->setTimezone('America/Sao_Paulo');
         $endTime = Carbon::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['end_time'])->setTimezone('America/Sao_Paulo');
+     
+        if($startTime->isPast()){
+            throw new \Exception('A reunião não pode ser marcada no passado');
+        }
 
         $data['date'] = $startTime->format('Y-m-d');
 
-        if ($this->meetingRepository->hasTimeConflict($data['room_id'], $startTime, $endTime)) {
+        if ($this->meetingRepository->hasTimeConflict($data['room_id'], $data['date'],$startTime, $endTime)) {
             throw new \Exception('Conflito de horário com outra reunião.');
         }
 
@@ -101,8 +105,12 @@ class MeetingService
 
         $startTime = Carbon::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['start_time'])->setTimezone('America/Sao_Paulo');
         $endTime = Carbon::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['end_time'])->setTimezone('America/Sao_Paulo');
+        
+        if($startTime->isPast()){
+            throw new \Exception('A reunião não pode ser marcada no passado');
+        }
 
-        if ($this->meetingRepository->hasTimeConflict($data['room_id'], $startTime, $endTime)) {
+        if ($this->meetingRepository->hasTimeConflict($data['room_id'], $data['date'],$startTime, $endTime)) {
             throw new \Exception('Conflito de horário com outra reunião.');
         }
 

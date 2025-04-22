@@ -191,7 +191,7 @@ export default {
       tableColumns: [
         { key: 'name', label: 'Nome', sortable: true },
         { key: 'email', label: 'E-mail', sortable: true },
-        { key: 'cpf', label: 'CPF', sortable: true, formatter: this.formatCpf },
+        { key: 'cpf', label: 'CPF', sortable: true, formatter: (value) => this.formatCpf },
         { key: 'role', label: 'Função', sortable: true },
         { key: 'created_at', label: 'Data de Cadastro', sortable: true },
       ],
@@ -297,10 +297,12 @@ export default {
       this.isLoading = true;
       try {
         const data = await apiGetUsers();
-        this.users = data.users;
+        console.log(data);
+        this.users = data;
         this.filterUsers();
       } catch (error) {
         toast.error(`Erro ao carregar usuários: ${(error.response?.data?.message || "Erro desconhecido.")}`);
+        console.log(error);
       } finally {
         this.isLoading = false;
       }

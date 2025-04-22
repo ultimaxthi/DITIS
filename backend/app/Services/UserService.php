@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
 
+
 class UserService
 {
     protected $userRepository;
@@ -35,6 +36,11 @@ class UserService
     public function isCurrentUserAdmin()
     {
         return Auth::check() && Auth::user()->role === 'admin';
+    }
+
+    public function getUserbyId($id)
+    {
+        return $this->userRepository->getUserByCpf($id);
     }
 
     /**
@@ -214,6 +220,7 @@ class UserService
      * Realizar logout do usuário
      * 
      * @param \App\Models\User $user
+     * @param \App\Models
      * @return array
      */
     public function logoutUser($user)

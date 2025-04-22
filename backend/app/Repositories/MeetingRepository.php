@@ -62,12 +62,13 @@ class MeetingRepository
         return Meeting::with('user', 'room')->where('user_id', $userId)->get();
     }
 
-    public function hasTimeConflict($roomId, $startTime, $endTime)
+    public function hasTimeConflict($roomId, $date, $startTime, $endTime)
     {
         \Log::info("Verificando conflito para Sala ID: $roomId, Início: $startTime, Fim: $endTime");
 
         $conflict = Meeting::where('room_id', $roomId)
             ->where('status', 'confirmed')
+            ->where('date', '=' , $date)
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->where(function ($query) use ($startTime, $endTime) {
                     $query->where('start_time', '<', $endTime)
