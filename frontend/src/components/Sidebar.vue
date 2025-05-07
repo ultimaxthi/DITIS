@@ -8,10 +8,10 @@
         <Home class="icon" />
         <span>Início</span>
       </RouterLink>
-      <RouterLink to="/salas" class="nav-item">
+      <!-- <RouterLink to="/salas" class="nav-item">
         <Users class="icon" />
         <span>Salas</span>
-      </RouterLink>
+      </RouterLink> -->
       <RouterLink to="/reunioes" class="nav-item">
         <Calendar class="icon" />
         <span>Reuniões</span>

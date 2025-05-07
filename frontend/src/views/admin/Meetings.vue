@@ -187,6 +187,9 @@ const editMeetingId = ref(null);
 const rooms = ref([]);
 const users = ref([]);
 
+
+
+
 // Opções de status já virão formatadas da API
 const statusOptions = ref([]);
 
@@ -195,6 +198,8 @@ const userOptions = computed(() => {
   console.log('Processando user options a partir de:', users.value);
   return users.value || [];
 });
+
+
 
 // Computed property para gerar as opções de salas para select
 const roomOptions = computed(() => {
@@ -241,6 +246,20 @@ const newMeeting = ref({
   start_time: '',
   end_time: '',
   status: 'confirmed',
+});
+
+import { watch } from 'vue';
+
+function isWeekend(dateStr) {
+  const date = new Date(dateStr);
+  const day = date.getDay(); // 0 = Domingo, 6 = Sábado
+  return day === 0 || day === 6;
+}
+
+watch(() => newMeeting.value.date, (newDate) => {
+  if (newDate && isWeekend(newDate)) {
+    toast.warning('Você está criando uma reunião no fim de semana.', { autoClose: 5000 });
+  }
 });
 
 // Validadores para o formulário

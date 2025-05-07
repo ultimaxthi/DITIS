@@ -47,10 +47,10 @@
       <div class="nav-section">
         <h4 class="nav-title">Configurações</h4>
         
-        <RouterLink to="/profile" class="nav-item">
+        <!-- <RouterLink to="/profile" class="nav-item">
           <i class="fas fa-user-cog icon"></i>
           <span>Meu Perfil</span>
-        </RouterLink>
+        </RouterLink> -->
         
         <button @click="logout" class="nav-item logout-btn">
           <i class="fas fa-sign-out-alt icon"></i>

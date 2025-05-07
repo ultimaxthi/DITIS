@@ -14,16 +14,16 @@
           </div>
           <div class="action-container">
             <BadgeStatus :status="meeting.status" />
-            <button
+            <!-- <button
               v-if="meeting.status === 'canceled'"
               class="restore-btn"
               @click="updateStatus(meeting.id, 'confirmed')"
             >
               Reativar
-            </button>
-            <button v-else class="cancel-btn" @click="updateStatus(meeting.id, 'canceled')">
+            </button> -->
+            <!-- <button class="cancel-btn" @click="updateStatus(meeting.id, 'canceled')">
               Cancelar
-            </button>
+            </button> -->
           </div>
         </div>
       </div>

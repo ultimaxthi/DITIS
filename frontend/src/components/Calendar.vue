@@ -20,6 +20,8 @@ export default {
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
         locale: ptLocale,
         initialView: 'dayGridWeek',
+        slotMinTime: '07:00:00',
+        slotMaxTime: '22:00:00',
         headerToolbar: {
           left: '',
           center: 'title',
@@ -70,7 +72,7 @@ export default {
       const userRole = localStorage.getItem('role');
 
       try {
-        const data = userRole === 'admin' ? await apiGetAllMeetings() : await apiGetUserMeetings();
+        const data = await apiGetAllMeetings();
         
         // Registrar no console para debug
         console.log('Dados da API:', data);
@@ -504,6 +506,30 @@ export default {
       font-weight: 600 !important;
       color: #4a5568 !important;
       margin-right: 4px !important;
+    }
+  }
+}
+
+::v-deep .fc {
+  .fc-timeGridWeek-view,
+  .fc-timeGridDay-view {
+    .fc-scroller-liquid-absolute {
+      height: auto !important;
+      overflow-y: scroll !important;
+      max-height: 600px; // você pode ajustar esse valor conforme seu layout
+    }
+
+    .fc-timegrid-body {
+      overflow-y: auto;
+      max-height: 600px; // define altura máxima visível com scroll
+    }
+
+    .fc-timegrid-slot {
+      min-height: 40px; // aumenta espaço entre linhas (opcional)
+    }
+
+    .fc-timegrid {
+      height: auto !important;
     }
   }
 }

@@ -23,7 +23,7 @@
         <div class="card">
           <DataTable
             :columns="tableColumns"
-            :items="filteredUsers.length > 0 || searchTerm ? filteredUsers : users"
+            :items="searchTerm ? filteredUsers : users"
             :loading="isLoading"
             :pagination="true"
             :initialItemsPerPage="10"
@@ -191,7 +191,7 @@ export default {
       tableColumns: [
         { key: 'name', label: 'Nome', sortable: true },
         { key: 'email', label: 'E-mail', sortable: true },
-        { key: 'cpf', label: 'CPF', sortable: true, formatter: (value) => this.formatCpf },
+        { key: 'cpf', label: 'CPF', sortable: true, formatter: (value) => this.formatCpf(value) },
         { key: 'role', label: 'Função', sortable: true },
         { key: 'created_at', label: 'Data de Cadastro', sortable: true },
       ],
@@ -287,7 +287,7 @@ export default {
         return (
           user.name.toLowerCase().includes(this.searchTerm) ||
           user.email.toLowerCase().includes(this.searchTerm) ||
-          user.cpf.includes(this.searchTerm)
+          user.cpf.replace(/\D/g, '').includes(this.searchTerm.replace(/\D/g, ''))
         );
       });
     },

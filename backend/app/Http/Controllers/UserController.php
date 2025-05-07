@@ -62,9 +62,9 @@ class UserController extends Controller
                 'name' => 'sometimes|required|string',
                 'email' => 'sometimes|required|string|email|unique:users,email,' . $id,
                 'cpf' => 'sometimes|required|string|max:11|unique:users,cpf,' . $id,
-                'password' => 'sometimes|required|string|min:8|confirmed|nullable',
+                'password' => 'nullable|string|min:8|confirmed',
                 'role' => 'sometimes|string|in:admin,user',
-            ]);
+            ]); 
 
             $user = $this->userService->updateAdmin($id, $data);
 
